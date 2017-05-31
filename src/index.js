@@ -86,7 +86,7 @@ function changeDirectory(root, callback) {
  */
 function installPackage(override, callback) {
     const packageName = 'cnn-starter-proxy';
-    const uri = override || `git+ssh://git@github.com/cnnlabs/${packageName}.git`;
+    const uri = override || `https://github.com/cnnlabs/${packageName}.git`;
 
     let command = 'npm';
     let args = ['i', '-E', uri];
