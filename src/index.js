@@ -5,6 +5,7 @@ const fse = require('fs-extra');
 const kebabCase = require('lodash.kebabcase');
 const path = require('path');
 const program = require('commander');
+const semver = require('semver');
 const spawn = require('child_process').spawn;
 const execSync = require('child_process').execSync;
 const packageJSON = require('../package.json');
@@ -123,26 +124,13 @@ function run(root) {
     }
 }
 
-/**
- * Normalize node version.
- *
- * @example
- * `formatNodeVersion('>=6.4.2') => '6.4.2'`
- *
- * @param {String} str - Node version
- * @return {String} Containing only Numbers and periods.
- */
-function formatNodeVersion(str) {
-    return str.replace(/[^0-9.-]/g, '');
-}
-
 function checkNodeVersion(callback) {
     const required = packageJSON.engines.node;
     const current = process.versions.node;
 
     log.info(chalk.gray('Checking node version.'));
 
-    if (formatNodeVersion(current) < formatNodeVersion(required)) {
+    if (!semver.satisfies(current, required)) {
         log.error(chalk.red(`You are running node version ${chalk.bold(current)}, but should be running at least ${chalk.bold(required)}`));
         log.error(chalk.red('Update node and try again.'));
         process.exit(1);
